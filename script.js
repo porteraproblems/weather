@@ -1,11 +1,17 @@
 $(document).ready(function () {
 
     $("#search-button").on("click", function () {
+        event.preventDefault();
         var searchValue = $("#search-value").val();
-    })
-
     $("search-value").val("");
     searchValue(searchValue)
+    var citiesSearch = [];
+
+    citiesSearch = JSON.parse(localStorage.getItem("citiesSearch")) || [];
+    citiesSearch.push(searchValue);
+    localStorage.setItem("citiesSearch", JSON.stringify(citiesSearch));
+
+    searchWeather(searchValue);
 })
 
 function searchWeather(searchValue) {
