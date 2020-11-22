@@ -1,6 +1,8 @@
+//Document Ready Funciton
 $(document).ready(function () {
 
-    $("#search-button").on("click", function () {
+    //Search Button
+    $("#search-button").on("click", function (event) {
         event.preventDefault();
         var searchValue = $("#search-value").val();
     $("search-value").val("");
@@ -12,7 +14,8 @@ $(document).ready(function () {
     localStorage.setItem("citiesSearch", JSON.stringify(citiesSearch));
 
     searchWeather(searchValue);
-})
+});
+
 
 function searchWeather(searchValue) {
     $.ajax({
@@ -30,9 +33,14 @@ function searchWeather(searchValue) {
         var card = $("<div>").addClass("card");
         var wind = $("<p>").addClass("card-text").text("Wind speed: " + data.wind.speed);
         var humid = $("<p>").addClass("card-text").text("Humidity: " + data.main.humidity);
+        var temp =$("<p>").addClass("card-text").text("Temperature: " + data.main.temp);
+        var tempLow =$("<p>").addClass("card-text").text("Low Temp: " + data.main.tempLow);
+        var tempHigh = $("<p>").addClass("card-text").text("High Temp: " + data.main.tempHigh);
+        var condition = $("<p>").addClass("card-text").text("Weather Conditions: " + data.main.condition);
+        var icon = (Image);
         var cardBody = $("<div").addClass("card-body");
 
-        cardBody.append(title, wind, humid)
+        cardBody.append(title, wind, humid, temp, tempHigh, tempLow, condition, icon)
         card.append(cardBody);
         $("#today").append(card)
     });
