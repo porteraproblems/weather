@@ -47,13 +47,38 @@ function searchWeather(searchValue) {
         card.append(cardBody);
         $("#today").append(card)
         uvIndex();
-        forecastWeather(searchValue);
+        forecast(searchValue);
     });
 };
 
 // function to get a 5 day forecast, it's a different url
 //use a forloop to loop over all forecasts (by spec)
-
+function forecast(searchValue) {
+    $.ajax({
+        type: "GET",
+        url: "",
+        dataType: "JSON",
+    }).then(function(data) {
+        console.log(data)
+        for (var i = 4; i < data.list.length; i+=8) {
+            var setDate = data.list[i].dt_txt;
+            setDate = setDate.split("-");
+            var month = setDate[1];
+            var day = setDate[2].slice(0, 2);
+            var year = setDate[0];
+            var humid = $("<p>").addClass("card-text").text("Humidity: " + data.main.humidity);
+            var temp =$("<p>").addClass("card-text").text("Temperature: " + data.main.temp);
+            var icon = (`<img src="http://openweathermap.org/img/w/${data.weather[0].icon}.png">`)
+            var title = $("<h3>").addClass("card-title").text(data.name);
+            var card = $("<div>").addClass("card");
+            var wind = $("<p>").addClass("card-text").text("Wind speed: " + data.wind.speed);
+            var cardBody = $("<div").addClass("card-body");
+            cardBody.append(title, icon, temp, humid, wind)
+            card.append(cardBody);
+            $("#today").append(card);
+        }
+    })
+}
 
 //function to ger UV index, this is a third url call
 function uvIndex() {
