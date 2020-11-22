@@ -65,6 +65,22 @@ function uvIndex() {
         var uvIndex = $("<p>").addClass("card-text").text(`UV-Index: ${data.value}`);
         var button = $("<button>").addClass("btn uIndex");
         button.append(uvIndex);
+        console.log(data);
+        if (data.value < 3) {
+            $(".uTndex").addClass("low");
+        }
+        else if (data.value <= 6) {
+            $(".uTndex").addClass("moderate");
+        }
+        else if (data.value < 8) {
+            $(".uTndex").addClass("high");
+        }
+        else if (data.value < 11) {
+            $(".uTndex").addClass("veryHigh");
+        }
+        else if (data.value > 11) {
+            $(".uTndex").addClass("extreme");
+        }
     })
 }
 // get current search history, if there s any
