@@ -56,7 +56,17 @@ function searchWeather(searchValue) {
 
 
 //function to ger UV index, this is a third url call
-
+function uvIndex() {
+    $.ajax({
+        type: "GET",
+        url: "",
+        type: "JSON",
+    }).then(function (data) {
+        var uvIndex = $("<p>").addClass("card-text").text(`UV-Index: ${data.value}`);
+        var button = $("<button>").addClass("btn uIndex");
+        button.append(uvIndex);
+    })
+}
 // get current search history, if there s any
 
 //print out search/
