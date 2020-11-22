@@ -16,13 +16,15 @@ $(document).ready(function () {
     searchWeather(searchValue);
 });
 
-
+// function to search weather
 function searchWeather(searchValue) {
     $.ajax({
         type: "GET",
         url: "https://api.openweathermap.org/data/2.5/weather?q=" + searchValue + "&appdid=166a4335751651dfab1fedead8413&units=imperial",
         dataType: "json",
     }).then(function (data) {
+        console.log(data);
+    
         // create history link for the search (look up .push()) this is sued to set items to localstorage
 
 
@@ -37,12 +39,15 @@ function searchWeather(searchValue) {
         var tempLow =$("<p>").addClass("card-text").text("Low Temp: " + data.main.tempLow);
         var tempHigh = $("<p>").addClass("card-text").text("High Temp: " + data.main.tempHigh);
         var condition = $("<p>").addClass("card-text").text("Weather Conditions: " + data.main.condition);
-        var icon = (Image);
+        var icon = (`<img src="http://openweathermap.org/img/w/${data.weather[0].icon}.png">`)
         var cardBody = $("<div").addClass("card-body");
 
+        //appends
         cardBody.append(title, wind, humid, temp, tempHigh, tempLow, condition, icon)
         card.append(cardBody);
         $("#today").append(card)
+        uvIndex();
+        forecastWeather(searchValue);
     });
 };
 
@@ -54,4 +59,4 @@ function searchWeather(searchValue) {
 
 // get current search history, if there s any
 
-//print out search history
+//print out search/
