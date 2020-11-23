@@ -5,7 +5,7 @@ $(document).ready(function () {
         event.preventDefault();
         var searchValue = $("#search-value").val();
         $("search-value").val("");
-        searchValue(searchValue)
+        searchValue(searchValue);
         var citiesSearch = [];
 
         citiesSearch = JSON.parse(localStorage.getItem("citiesSearch")) || [];
@@ -13,7 +13,7 @@ $(document).ready(function () {
         localStorage.setItem("citiesSearch", JSON.stringify(citiesSearch));
 
         searchWeather(searchValue);
-    });
+    }) ;
 
     // function to search weather
     function searchWeather(searchValue) {
