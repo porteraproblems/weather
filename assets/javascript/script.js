@@ -5,22 +5,25 @@ $(document).ready(function () {
         event.preventDefault();
         var searchValue = $("#search-value").val();
         $("search-value").val("");
-        searchValue(searchValue);
         var citiesSearch = [];
         citiesSearch = JSON.parse(localStorage.getItem("citiesSearch")) || [];
         citiesSearch.push(searchValue);
         localStorage.setItem("citiesSearch", JSON.stringify(citiesSearch));
         searchWeather(searchValue);
     });
-
+    let lat = "";
+    let lon = "";
     // function to search weather
     function searchWeather(searchValue) {
         $.ajax({
             type: "GET",
-            url: "https://api.openweathermap.org/data/2.5/weather?q=" + searchValue + "&appdid=166a4335751651dfab1fedead8413&units=imperial",
+            url: "https://api.openweathermap.org/data/2.5/weather?q=" + searchValue + "&appdid=2de0fec5877aa50b7c3056e0dbdac3aa&units=imperial",
             dataType: "json",
         }).then(function (data) {
             console.log(data);
+            lat = data.coord.lat;
+            lon = data.coord.lon;
+
             $("#today").empty();
             // creating a card for appending
             var title = $("<h3>").addClass("card-title").text(data.name);
@@ -32,7 +35,7 @@ $(document).ready(function () {
             var tempHigh = $("<p>").addClass("card-text").text("High Temp: " + data.main.tempHigh);
             var condition = $("<p>").addClass("card-text").text("Weather Conditions: " + data.main.condition);
             var icon = (`<img src="http://openweathermap.org/img/w/${data.weather[0].icon}.png">`)
-            var cardBody = $("<div").addClass("card-body");
+            var cardBody = $("<div").addClass("card-body hmdt");
             //appends
             cardBody.append(title, wind, humid, temp, tempHigh, tempLow, condition, icon)
             card.append(cardBody);
@@ -46,10 +49,11 @@ $(document).ready(function () {
     function forecast(searchValue) {
         $.ajax({
             type: "GET",
-            url: "",
+            url: `https://api.openweathermap.org/data/2.5/forecast?q=${searchValue}&appid=2de0fec5877aa50b7c3056e0dbdac3aa&units=imperial`,
             dataType: "JSON",
         }).then(function (data) {
             console.log(data)
+            
             for (var i = 4; i < data.list.length; i += 8) {
                 var setDate = data.list[i].dt_txt;
                 setDate = setDate.split("-");
@@ -70,30 +74,31 @@ $(document).ready(function () {
         })
     }
     //function to ger UV index, this is a third url call
-    function uvIndex() {
+    function uvIndex(lon, lat) {
         $.ajax({
             type: "GET",
-            url: "",
+            url: `https://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=2de0fec5877aa50b7c3056e0dbdac3aa`,
             type: "JSON",
         }).then(function (data) {
             var uvIndex = $("<p>").addClass("card-text").text(`UV-Index: ${data.value}`);
             var button = $("<button>").addClass("btn uIndex");
             button.append(uvIndex);
+            $(".hmdt").append(button);
             console.log(data);
             if (data.value < 3) {
-                $(".uTndex").addClass("low");
+                $(".uIndex").addClass("low");
             }
             else if (data.value <= 6) {
-                $(".uTndex").addClass("moderate");
+                $(".uIndex").addClass("moderate");
             }
             else if (data.value < 8) {
-                $(".uTndex").addClass("high");
+                $(".uIndex").addClass("high");
             }
             else if (data.value < 11) {
-                $(".uTndex").addClass("veryHigh");
+                $(".uIndex").addClass("veryHigh");
             }
             else if (data.value > 11) {
-                $(".uTndex").addClass("extreme");
+                $(".uIndex").addClass("extreme");
             }
         })
     }
@@ -105,4 +110,13 @@ $(document).ready(function () {
             $("#city-list").append("<div>" + "<button class = 'itemList brn brn-primary' >" + searchedFromLocal + "</button");
         }
     }
+
+
+    searched();;
+    $("#city-list").on("click", ".itemList", function (event) {
+        event.preventDefault();
+        var searchedCity = ($(this).text());
+        searched(searchedCity);
+    })
+
 })
