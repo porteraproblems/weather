@@ -7,13 +7,11 @@ $(document).ready(function () {
         $("search-value").val("");
         searchValue(searchValue);
         var citiesSearch = [];
-
         citiesSearch = JSON.parse(localStorage.getItem("citiesSearch")) || [];
         citiesSearch.push(searchValue);
         localStorage.setItem("citiesSearch", JSON.stringify(citiesSearch));
-
         searchWeather(searchValue);
-    }) ;
+    });
 
     // function to search weather
     function searchWeather(searchValue) {
@@ -23,10 +21,7 @@ $(document).ready(function () {
             dataType: "json",
         }).then(function (data) {
             console.log(data);
-
-
             $("#today").empty();
-
             // creating a card for appending
             var title = $("<h3>").addClass("card-title").text(data.name);
             var card = $("<div>").addClass("card");
@@ -38,7 +33,6 @@ $(document).ready(function () {
             var condition = $("<p>").addClass("card-text").text("Weather Conditions: " + data.main.condition);
             var icon = (`<img src="http://openweathermap.org/img/w/${data.weather[0].icon}.png">`)
             var cardBody = $("<div").addClass("card-body");
-
             //appends
             cardBody.append(title, wind, humid, temp, tempHigh, tempLow, condition, icon)
             card.append(cardBody);
@@ -47,7 +41,6 @@ $(document).ready(function () {
             forecast(searchValue);
         });
     };
-
     // function to get a 5 day forecast, it's a different url
     //use a forloop to loop over all forecasts (by spec)
     function forecast(searchValue) {
@@ -76,7 +69,6 @@ $(document).ready(function () {
             }
         })
     }
-
     //function to ger UV index, this is a third url call
     function uvIndex() {
         $.ajax({
@@ -105,7 +97,6 @@ $(document).ready(function () {
             }
         })
     }
-
     //History recall
     function searched() {
         var searchedLocalStorage = JSON.parse(localStorage.getItem("searched")) || [];
@@ -114,3 +105,4 @@ $(document).ready(function () {
             $("#city-list").append("<div>" + "<button class = 'itemList brn brn-primary' >" + searchedFromLocal + "</button");
         }
     }
+})
